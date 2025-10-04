@@ -19,7 +19,7 @@ The summits/routes I completed were:
 - Alalinhorn NW Face (Normal Route) + most of the Feechopf ridge. 
 - Lagginhorn West Ridge 
 - Weismies Northwest Flank (Normal Route) 
-- Weismies SE ridge (In descent) 
+- Weissmies SE ridge (In descent) 
 - Dri Horlini Traverse 
 - Alalinhorn via Hohlaubgrat route 
 
@@ -29,11 +29,11 @@ Gabe and Nathan also did the Nedelhorn and some other ridges.
 
 I have summarised a few of my favourites below.
 
-# Weismies
+# Weissmies
 
 ![](./weissmies_glacier.jpg) 
 
-Katharine, Nathan and I did Weismies as a three. The first section glacier was busy and I found the main steep icy slope to be quite scary, but once you are above that it is a long but pleasant snow plod to the top. 
+Katharine, Nathan and I did Weissmies as a three. The first section glacier was busy and I found the main steep icy slope to be quite scary, but once you are above that it is a long but pleasant snow plod to the top. 
 
 ![](./katharine_on_weissmies.jpg "Katharine on the tranquil summit of Weissmies")
 
