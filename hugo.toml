@@ -1,6 +1,6 @@
 # Template Docs : https://tomfran.github.io/typo-wiki/features/
-baseURL = "https://www.tomhepworth.com/"
-canonifyURLs = true
+
+baseURL = 'https://tomhepworth.com/'
 languageCode = 'en-uk'
 title = 'Tom Hepworth'
 theme = 'typo'
