@@ -1,0 +1,72 @@
+# Template Docs : https://tomfran.github.io/typo-wiki/features/
+
+baseURL = 'https://tomhepworth.com/'
+languageCode = 'en-uk'
+title = 'Tom Hepworth'
+theme = 'typo'
+
+# Google analytics code
+googleAnalytics = "G-xxxxxxxxx"
+
+pluralizeListTitles = false
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[taxonomies]
+tag = 'tags'
+
+[params]
+# Meta description
+description = "Tom Hepworth's Website"
+
+# Appearance settings
+theme = 'light'
+colorPalette = 'base16-default'
+hideHeader = false
+
+# Intro on main page, content is markdown
+homeIntroTitle = ''
+homeIntroContent = """
+Welcome to my website. 
+
+I have categorised it into two sections. "Outside" for climbing, mountaineering, sailing, and other trips / experiences, and "Inside" for things I have made, electronics, woodworking etc. 
+
+I hope you enjoy.
+"""
+
+# Lists parameters
+paginationSize = 100
+listSummaries = true
+listDateFormat = '2 January 2006'
+
+showFooter = true
+footerContent = "© Tom Hepworth 2025. Do not scrape this website for training LLMs"
+
+
+# Breadcrumbs
+[params.breadcrumbs]
+enabled = true
+showCurrentPage = true
+home = "Home"
+
+# Social icons
+[[params.social]]
+name = "linkedin"
+url = "https://uk.linkedin.com/in/thomashepworth"
+
+# Main menu pages
+[[params.menu]]
+name = "Home"
+url = "/"
+
+[[params.menu]]
+name = "Outside"
+url = "/outside"
+
+[[params.menu]]
+name = "Inside"
+url = "/inside"
+
