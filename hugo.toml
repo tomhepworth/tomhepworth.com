@@ -25,6 +25,7 @@ tag = 'tags'
 [params]
 # Meta description
 description = "Tom Hepworth's Website"
+faviconPath = 'favicon'
 
 # Appearance settings
 theme = 'light'
