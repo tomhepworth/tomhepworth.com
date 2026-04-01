@@ -23,7 +23,7 @@ To begin lets take an imaginary RISC-V CPU as an example with the following feat
  - Its an RV32IMAC core. This means it supports integer, multiply, atomic, and compressed instructions. It does not support floating point.
  - It has a single core which runs at 1GHz
  - It has a dual issue, in-order pipeline: 
-    - Two arithentic operations can be inflight 
+    - Two arithmetic operations can be inflight 
     - A single memory operation can be inflight. 
     - An arithetic instruciton like `add a2, a3, a4` can execute in a single cycle.
     - Given that it supports the M extension, suppose it can do a 32-bit multiply in 4 cycles.
@@ -82,29 +82,63 @@ loop:
     lw a, A[i];
     lw b, B[i];
     mul b, a, b;
-    rsi shift, mul, 2;
+    srli shift, mul, 2;
     add shift shift bias
     add sum sum shift
 ```
 
 By my rough calculation, assuming we can use the dual issue pipeline and fit the arrays in L1 cache, this should take about 7 cycles per iteration. 
 
-With 4 operations and 7 cycles to load, this gives us 57% throughput, and our max possible performance is actually 1.14GOP/s. This defines our "Kernel Roof". It is common to define many "Roofs" for different levels of abstraction and different HW features enabled. EG with/without prefetching, with/without cache misses. Ultimately when you measure performance, the presence of these different boundaries allow you to diagnose why your performance may be lower than you expect. 
+With 4 operations and 7 cycles to complete them, this gives us 57% throughput, and our max possible performance is actually 1.14GOP/s. This defines our "Kernel Roof".  
+
+It is common to define many "Roofs" for different levels of abstraction and with different hardware features being utilized. EG with/without prefetching or with/without multithreading. This type of "Roof" would be considered an "In-core" ceiling, as opposed to e.g a bandwidth ceiling like our diagonal L1 cache and DRAM lines. So far we have covered diagonal and horizontal "Roofs"... But what about vertical walls?
+
+A vertical wall would indicate a some boundary in operational intensity. In our case study, an example of these walls might represent whether we hit the L1 cache or not. When there are many cache hits, we are less memory-bound.
+
+Wikipedia calls these "Locality walls":
+
+>If the ideal assumption that arithmetic intensity is solely a function of the kernel is removed, and the cache topology - and therefore cache misses - is taken into account, the arithmetic intensity clearly becomes dependent on a combination of kernel and architecture. - Wikipedia
+
+This is an important point. Obviously, performance is acheived through a combination of hardware and software effort. We cant assume they are independent.
+
+Given that we have an access time of 1 cycle in L1 cache and 4 cycles in DRAM, we might take 6-more cycles to process an iteration where loading `A[i]` and `B[i]` are cache misses. This doesnt change the *algorithmic* operational intensity of the kernel, However, it does change our *effective* intensity, and is a much more realistic model.  
+
+Point A on the graph represents a run where all loads are cache hits. We are at our "Kernel Roof" ceiling and our performance is at its best.
+
+When we get cache misses, our *effective* arithemtic intensity reduces. In our case, if every load missed L1 we would spend it would then have to be fetched from DRAM which takes 4x as long. For simplicity we can model this as more bytes transferred. This gives us a new arithemtic intensity of 4 operations / 32 bytes. Its clear from the diagram that we are heavily bound by memory now. Point B represents a run like this. 
+
+The Locality walls can now help us understand how many cache misses we are getting. Point C shows a run where half the loads hit the cache. 
 
 ![](./roofline3.jpg)
 
-From the roofline graph and assembly, we might comclude we are still memory bound, as we have a data dependency on the result of the multiply which slows down our loop. 
+Ultimately when you measure performance, the presence of these different boundaries allow you to diagnose why your performance may be lower than you expect. Which walls you are between and which ceilings you are above/below can help you understand what is happening in your program
 
-Next, consider if we unrolled the loop and loaded the next A and B elements while the previous were processing... 
+Finally, consider if we unrolled the loop and loaded the next A and B elements while the previous were processing... 
 
-Note: A better compiler might have done this...
+We might get assembly like this: 
 
 ```
 loop:
-    add sum sum  bias
-    lw a, A[i];
-    lw b, B[i];
-    mul b, a, b;
-    rsi shift, mul, 2;
-    add sum sum shift
+    lw   a,  A[i]   
+    lw   b,  B[i]
+
+    mul  m0, a, b          # starts (4 cycles)
+
+    # --- Hide load latency behind 4-cycle mul ---
+    lw   a1, A[i+1]
+    lw   b1, B[i+1]
+
+    srli t0, m0, 2
+    add  sum, sum, t0
+    add  sum, sum, bias
+
+    mul  m1, a1, b1         # starts while above ops happen
+    srli t1, m1, 2
+    add  sum, sum, t1
+    add  sum, sum, bias`
 ```
+
+This may only take about 10 cycles with 16 bytes loaded. Depending on the caching performance gives us an improved effective arithemtic intensity. Since we have a better ratio of operations to cycles, this will result in a higher Kernel Roof and almost certainly improve performance for large N. 
+Point D shows an example run with a cache hit rate of 50%. It is much better than C which had a similar hit-rate but was not unrolled, but note how performance is still lower than A - a simple kernel with 100% cache hits. Caching is important!   
+
+
