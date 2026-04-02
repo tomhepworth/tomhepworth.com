@@ -60,7 +60,7 @@ Now we can set some initial ceilings on our graph. Our peak performance is given
 
 Unfortunately though, we do have loads and stores and our performance will be limited by the memory bandwidth. At any given point, our performance ceiling will be the minimum of the peak performance and the peak bandwidth multiplied by the arithmetic intensity. This is is a counter-intuitive way to say "Performance will be bottlenecked by memory, until memory is fast enough to supply all the arithmetic we are trying to do". The model of bandwidth * arithmetic intensity gives us a sloping line up to the point where peak performance is met and increasing bandwidth would no longer have an effect. This point is called the "Ridge point", and, as you can see from the graph, it is the minimum amount of "Work" possible to reach peak performance on this kernel. 
 
-![](./roofline2.jpg "Empty roofline graph")
+![](./roofline1.jpg "Empty roofline graph")
 
 Our real performance will sit somewhere under these ceilings. For small `N` we should have plenty of space for our vector in L1 cache. We might be be to the right of the "Ridge point". We should be theoretically only be limited by our peak performance. IE, we have a *compute-bound* workload and in order to go faster we have to increase the performance somehow. On this tiny core our options are limited, but on high-performance CPUs you might consider trying to use multi-threading, SIMD instructions, etc. 
 
@@ -140,5 +140,4 @@ loop:
 
 This may only take about 10 cycles with 16 bytes loaded. Depending on the caching performance gives us an improved effective arithemtic intensity. Since we have a better ratio of operations to cycles, this will result in a higher Kernel Roof and almost certainly improve performance for large N. 
 Point D shows an example run with a cache hit rate of 50%. It is much better than C which had a similar hit-rate but was not unrolled, but note how performance is still lower than A - a simple kernel with 100% cache hits. Caching is important!   
-
 

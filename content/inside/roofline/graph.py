@@ -94,4 +94,5 @@ plt.text(ai_dot, perf_dot, "D", fontsize=10, fontweight="bold")
 plt.axhline(real_compute_unrolled, linestyle='--', color="Grey" , label="Kernel Compute Roof (Unrolling)")
 
 
-plt.savefig("roofline4.jpg", dpi=600)
+plt.legend()
+plt.savefig("roofline3.jpg", dpi=600)
