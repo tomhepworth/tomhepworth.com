@@ -11,8 +11,8 @@ hideBackToTop: false
 
 In 2023 I crewed on a boat delivery from St Tropez to Split. We stopped breifly on Corsica, in Messina, Dubrovnik, and finally Split.
 
+![](./DSC_0178.JPG "A hoopoe who sat on our boat for 3 days... ")
 ![](./DSC_0028.JPG "Corsica at sunrise")
-![](./DSC_0178.JPG "A hoopoe who sat on our boat for 3 days")
 ![](./DSC_0226.JPG "Hair nest")
 ![](./DSC_0265.JPG "Dolphin")
 ![](./DSC_0323.JPG "Sunset somwhere before reaching Siscily")
