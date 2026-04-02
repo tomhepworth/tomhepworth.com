@@ -1,16 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
 ai = np.logspace(-2, 2, 200)  # 0.01 to 100 ops/byte
+clock_speed = 1e9
 
 bw_l1 = 4e9             # 4 GB/s
 bw_dram = 1e9           # 1 GB/s
 k_ops = 4 
 k_bw = 8 
-k_cycles = 7
+k_cycles = 4
 perf_l1 = bw_l1 * ai
 perf_dram = bw_dram * ai
-peak_compute = 2e9      # 1 GOP/s
-real_compute = (k_ops / k_cycles) * peak_compute      # 1 GOP/s
+peak_compute = 2 * clock_speed      # 2 GOP/s
+real_compute = (k_ops / k_cycles) * clock_speed      # 1 GOP/s
 
 # Apply compute ceiling
 perf_l1 = np.minimum(perf_l1, peak_compute)
@@ -26,7 +27,7 @@ plt.loglog(ai, perf_l1, label="L1 Roof (4 GB/s)")
 plt.loglog(ai, perf_dram, label="DRAM Roof (1 GB/s)")
 
 # Compute roof
-plt.axhline(peak_compute, linestyle='--', color="green" , label="Theoretical Compute Roof (1 GOP/s)")
+plt.axhline(peak_compute, linestyle='--', color="green" , label="Theoretical Compute Roof (2 GOP/s)")
 
 plt.xlabel("Arithmetic Intensity (Ops/Byte)")
 plt.ylabel("Performance (Ops/s)")
@@ -58,7 +59,7 @@ plt.loglog(ai, perf_dram, label="DRAM Roof (1 GB/s)")
 
 # Compute roof
 plt.axhline(peak_compute, linestyle='--', color="green" , label="Theoretical Compute Roof (2 GOP/s)")
-plt.axhline(real_compute, linestyle='--', color="brown" , label="Kernel Compute Roof (1.14 GOP/s)")
+plt.axhline(real_compute, linestyle='--', color="brown" , label=f'Kernel Compute Roof ({(real_compute / 1.e9):.2f} GOP/s)')
 plt.xlabel("Arithmetic Intensity (Ops/Byte)")
 plt.ylabel("Performance (Ops/s)")
 
@@ -84,9 +85,9 @@ plt.text(ai_dot, perf_dot, "C", fontsize=10, fontweight="bold")
 
 
 k_ops_unrolled = 8 
-k_cycles_unrolled = 10
+k_cycles_unrolled = 7
 k_bw_unrolled = 16
-real_compute_unrolled = ( k_ops_unrolled / k_cycles_unrolled) * peak_compute
+real_compute_unrolled = ( k_ops_unrolled / k_cycles_unrolled) * clock_speed
 ai_dot = 10 / (k_bw_unrolled * 2)
 perf_dot = min(0.5*((bw_dram * ai_dot) + (bw_l1 * ai_dot)), real_compute_unrolled)
 plt.scatter([ai_dot], [perf_dot], color="magenta", edgecolors="black", linewidths=1, s=80)
