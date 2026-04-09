@@ -6,7 +6,8 @@ title = 'Tom Hepworth'
 theme = 'typo'
 
 # Google analytics code
-googleAnalytics = "G-xxxxxxxxx"
+[services.googleAnalytics]
+  ID = "G-09PCR5J27T"
 
 pluralizeListTitles = false
 
