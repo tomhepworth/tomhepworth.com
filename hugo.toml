@@ -4,12 +4,11 @@ baseURL = 'https://tomhepworth.com/'
 languageCode = 'en-uk'
 title = 'Tom Hepworth'
 theme = 'typo'
+pluralizeListTitles = false
 
 # Google analytics code
 [services.googleAnalytics]
   ID = "G-09PCR5J27T"
-
-pluralizeListTitles = false
 
 [caches]
   [caches.images]
