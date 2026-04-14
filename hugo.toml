@@ -35,11 +35,7 @@ hideHeader = false
 # Intro on main page, content is markdown
 homeIntroTitle = ''
 homeIntroContent = """
-Welcome to my website. 
-
-I have categorised it into two sections. "Outside" for climbing, mountaineering, sailing, and other trips / experiences, and "Inside" for things I have made, electronics, woodworking etc. 
-
-I hope you enjoy.
+Welcome
 """
 
 # Lists parameters
